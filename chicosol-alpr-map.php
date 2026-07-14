@@ -1,0 +1,96 @@
+<?php
+/**
+ * Plugin Name: ChicoSol ALPR Sharing Map
+ * Description: Responsive shortcode map of the 308 agencies receiving Chico Police Department ALPR detection data.
+ * Version: 1.0.0
+ * Author: ChicoSol
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+function chicosol_alpr_map_shortcode($atts = array()) {
+    $base_url = plugin_dir_url(__FILE__);
+
+    wp_enqueue_style(
+        'chicosol-alpr-map',
+        $base_url . 'assets/alpr-map.css',
+        array(),
+        '1.0.0'
+    );
+
+    wp_enqueue_script(
+        'd3',
+        'https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js',
+        array(),
+        '7',
+        true
+    );
+
+    wp_enqueue_script(
+        'topojson-client',
+        'https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js',
+        array('d3'),
+        '3',
+        true
+    );
+
+    wp_enqueue_script(
+        'chicosol-alpr-map',
+        $base_url . 'assets/alpr-map.js',
+        array('d3', 'topojson-client'),
+        '1.0.0',
+        true
+    );
+
+    $data_url = esc_url($base_url . 'assets/agencies.json');
+
+    ob_start();
+    ?>
+    <section class="cs-alpr-map" data-agencies-url="<?php echo $data_url; ?>">
+      <header class="cs-alpr-map__header">
+        <div>
+          <p class="cs-alpr-map__kicker">ALPR data sharing</p>
+          <h2 class="cs-alpr-map__title">Who receives Chico Police Department’s license-plate reader data?</h2>
+          <p class="cs-alpr-map__dek">
+            Each button represents an agency Chico PD shares detection data with. Select a pin to see the agency name, type and state.
+            Dotted lines connect every agency to Chico.
+          </p>
+        </div>
+        <div class="cs-alpr-map__count" aria-label="Agency count">
+          <span class="cs-alpr-map__count-number" data-agency-count>308</span>
+          <span class="cs-alpr-map__count-label">agencies</span>
+        </div>
+      </header>
+
+      <div class="cs-alpr-map__stage">
+        <div class="cs-alpr-map__controls" aria-label="Map controls">
+          <button class="cs-alpr-map__control" type="button" data-map-action="zoom-in" aria-label="Zoom in">+</button>
+          <button class="cs-alpr-map__control" type="button" data-map-action="zoom-out" aria-label="Zoom out">−</button>
+          <button class="cs-alpr-map__control" type="button" data-map-action="reset" aria-label="Reset map">Reset</button>
+        </div>
+        <svg class="cs-alpr-map__svg" role="img" aria-label="Map of agencies receiving Chico Police Department ALPR data"></svg>
+        <aside class="cs-alpr-map__popup" hidden>
+          <button class="cs-alpr-map__popup-close" type="button" aria-label="Close">×</button>
+          <p class="cs-alpr-map__popup-name"></p>
+          <p class="cs-alpr-map__popup-meta"></p>
+        </aside>
+        <p class="cs-alpr-map__status" aria-live="polite"></p>
+      </div>
+
+      <p class="cs-alpr-map__caption">
+        Locations are plotted at city centroids rather than street addresses. Municipal agencies use the city named in the report;
+        county agencies use their headquarters/county-seat city; state, federal, campus, transit, tribal and regional accounts use a
+        documented or best-fit headquarters/office city. Multiple agencies in one city are slightly separated so every pin remains selectable.
+      </p>
+
+      <details class="cs-alpr-map__list">
+        <summary>View all <span data-agency-count>308</span> agencies</summary>
+        <div class="cs-alpr-map__list-grid" data-agency-list></div>
+      </details>
+    </section>
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('chicosol_alpr_map', 'chicosol_alpr_map_shortcode');

@@ -1,0 +1,34 @@
+CHICOSOL ALPR MAP VALIDATION
+============================
+Source rows: 308 (expected 308) — PASS
+Map rows: 308 (expected 308) — PASS
+Federal agencies: 22 (expected 22) — PASS
+Rows missing coordinates: 0 — PASS
+Duplicate map IDs: 0 — PASS
+Source order preserved: yes — PASS
+
+State counts:
+  California: 193
+  Arizona: 67
+  Nevada: 16
+  Oregon: 19
+  District of Columbia: 12
+  Georgia: 1
+
+Agency type counts:
+  Police: 197
+  State: 17
+  Other: 25
+  Federal: 22
+  Sheriff: 46
+  State Police: 1
+
+Location methods:
+  Agency-name city match: 174
+  Manual headquarters/office city: 71
+  County seat / headquarters city: 63
+
+Important editorial note:
+Municipal pins use the named city's Census centroid. County agencies use the county-seat/headquarters city.
+Generic state, federal, regional, campus, transit, tribal and task-force accounts use an identified or best-fit office/headquarters city.
+The audit workbook marks those manual mappings as Medium confidence so editors can review them before publication.
