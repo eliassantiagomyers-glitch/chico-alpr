@@ -44,14 +44,7 @@
       <span id="calpr-count" class="calpr-count"></span>
       <span class="calpr-source">Source: Chico Police Department, Motorola VehicleManager Agency Data Sharing Report. Copyright ChicoSol.</span>
     </div>
-  </div>  
-  <div class="google-map">
-    <iframe 
-      src="https://www.google.com/maps/d/embed?mid=1xvAJ79le2OaYznYCJF8KSIPhU-Sw1aw&ehbc=2E312F&noprof=1" 
-      width="640" 
-      height="480">
-    </iframe>
-  </div>    
+  </div>
 </div>
 
 <style>
@@ -285,20 +278,6 @@
   @media (prefers-reduced-motion: reduce) {
     .calpr-line, .calpr-pin-dot { transition: none; }
   }
-     
-  .google-map {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-top: 30px;
- }
-
-.google-map iframe {
-  width: 90%;
-  max-width: 975px;
-  height: 600px;
-  border: 0;
- }
 </style>
 
 <script>
@@ -368,7 +347,7 @@
   });
 
   var fedCount = AGENCIES.filter(function(a){ return a.type === "Federal"; }).length;
-  countEl.textContent = AGENCIES.length + " agencies shown, including " + fedCount + " federal agencies";
+  countEl.textContent = AGENCIES.length + " agencies shown, including " + fedCount + " federal agencies and 84 out of state agencies";
 
   // ---- draw hub-and-spoke lines ----
   var lineEls = {};
