@@ -1,11 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chico Police Department's ALPR Data-Sharing Network</title>
 <!-- ==========================================================================
      ChicoSol ALPR Data-Sharing Network Map as of July 8, 2026.
-     No external dependencies (fonts, scripts, or map tiles) are loaded.
+     Standalone document, built to be loaded via <iframe src="..."> from
+     GitHub Pages. Loads only the Oswald webfont from Google Fonts for the
+     title; no other external scripts, tiles, or dependencies.
 
      By Elias S. Myers - contact: signal: @emsf.42 or at https://eliassmyers.wiki
 
      Copyright ChicoSol 2026
      ========================================================================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet" />
+</head>
+<body>
 <div id="calpr-root" class="calpr-root">
   <div class="calpr-card">
     <div class="calpr-header">
@@ -31,7 +44,7 @@
       </div>
 
       <div class="calpr-filterbar" role="group" aria-label="Filter agencies by category">
-        <button type="button" class="calpr-textToggleCalifornia is-active" id="calpr-filter-california" data-cat="california">California</button>
+        <button type="button" class="calpr-textToggle is-activeCalifornia" id="calpr-filter-california" data-cat="california">California</button>
         <button type="button" class="calpr-textToggle is-active" id="calpr-filter-outofstate" data-cat="outofstate">Out-of-State</button>
         <button type="button" class="calpr-textToggle is-active" id="calpr-filter-federal" data-cat="federal">Federal</button>
       </div>
@@ -53,7 +66,7 @@
 
     <div class="calpr-footer">
       <span id="calpr-count" class="calpr-count"></span>
-      <span class="calpr-source">Source: Chico Police Department, Motorola VehicleManager Agency Data Sharing Report. Elias S. Myers/ChicoSol.</span>
+      <span class="calpr-source">Source: Chico Police Department, Motorola VehicleManager Agency Data Sharing Report. Copyright ChicoSol.</span>
     </div>
   </div>
 </div>
@@ -102,6 +115,7 @@
   }
   .calpr-title {
     margin: 0 0 6px;
+    font-family: "Oswald", Arial, Helvetica, sans-serif;
     font-size: clamp(19px, 2.7vw, 25px);
     font-weight: 700;
     letter-spacing: -0.005em;
@@ -235,20 +249,6 @@
     cursor: pointer;
     border-bottom: 2px solid transparent;
   }
-  .calpr-textToggleCalifornia {
-    border: none;
-    background: none;
-    padding: 2px 1px;
-    font-family: inherit;
-    font-size: 11.5px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    color: var(--calpr-ink-faint);
-    opacity: 0.65;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-  }
   .calpr-textToggle:hover { opacity: 0.9; }
   .calpr-textToggle.is-active {
     opacity: 1;
@@ -256,7 +256,7 @@
     border-bottom-color: var(--calpr-accent);
   }
   .calpr-textToggle:hover { opacity: 0.9; }
-  .calpr-textToggleCalifornia.is-active {
+  .calpr-textToggle.is-activeCalifornia {
     opacity: 1;
     color: var(--calpr-ink);
     border-bottom-color: var(--calpr-green);
@@ -1037,3 +1037,5 @@
 
 })();
 </script>
+</body>
+</html>
