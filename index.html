@@ -1,19 +1,16 @@
 <!-- ==========================================================================
-     ChicoSol ALPR Data-Sharing Network Map
-     Self-contained embed: paste this entire file into a WordPress
-     "Custom HTML" block, or host it and embed via <iframe>.
+     ChicoSol ALPR Data-Sharing Network Map as of July 8, 2026.
      No external dependencies (fonts, scripts, or map tiles) are loaded.
 
-     TO UPDATE THE DATA: search for "AGENCY DATA STARTS HERE" below and
-     replace the JSON array. Each entry needs: name, state, type, lat, lon.
-     x/y (map pixel position) will be auto-computed from lat/lon if missing.
-     See the accompanying README for the full data-refresh workflow.
+     By Elias S. Myers - contact: signal: @emsf.42 or at https://eliassmyers.wiki
+
+     Copyright ChicoSol 2026
      ========================================================================== -->
 <div id="calpr-root" class="calpr-root">
   <div class="calpr-card">
     <div class="calpr-header">
       <h1 class="calpr-title">Chico Police Department's ALPR Data-Sharing Network</h1>
-      <p class="calpr-subtitle">Agencies with access to Chico PD's Automatic License-Plate Reader detections (ALPR), via Motorola's VehicleManager platform</p>
+      <p class="calpr-subtitle">Agencies with access to Chico PD's Automatic License Plate Reader detections as of July 8, 2026, via Motorola's VehicleManager platform.</p>
     </div>
 
     <div class="calpr-map-wrap">
@@ -34,7 +31,7 @@
       </div>
 
       <div class="calpr-filterbar" role="group" aria-label="Filter agencies by category">
-        <button type="button" class="calpr-textToggle is-active" id="calpr-filter-california" data-cat="california">California</button>
+        <button type="button" class="calpr-textToggleCalifornia is-active" id="calpr-filter-california" data-cat="california">California</button>
         <button type="button" class="calpr-textToggle is-active" id="calpr-filter-outofstate" data-cat="outofstate">Out-of-State</button>
         <button type="button" class="calpr-textToggle is-active" id="calpr-filter-federal" data-cat="federal">Federal</button>
       </div>
@@ -56,7 +53,7 @@
 
     <div class="calpr-footer">
       <span id="calpr-count" class="calpr-count"></span>
-      <span class="calpr-source">Source: Chico Police Department, Motorola VehicleManager Agency Data Sharing Report. Copyright ChicoSol.</span>
+      <span class="calpr-source">Source: Chico Police Department, Motorola VehicleManager Agency Data Sharing Report. Elias S. Myers/ChicoSol.</span>
     </div>
   </div>
 </div>
@@ -238,11 +235,31 @@
     cursor: pointer;
     border-bottom: 2px solid transparent;
   }
+  .calpr-textToggleCalifornia {
+    border: none;
+    background: none;
+    padding: 2px 1px;
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--calpr-ink-faint);
+    opacity: 0.65;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+  }
   .calpr-textToggle:hover { opacity: 0.9; }
   .calpr-textToggle.is-active {
     opacity: 1;
     color: var(--calpr-ink);
     border-bottom-color: var(--calpr-accent);
+  }
+  .calpr-textToggle:hover { opacity: 0.9; }
+  .calpr-textToggleCalifornia.is-active {
+    opacity: 1;
+    color: var(--calpr-ink);
+    border-bottom-color: var(--calpr-green);
   }
   .calpr-map-wrap {
     position: relative;
@@ -453,6 +470,19 @@
 <script>
 (function () {
   "use strict";
+
+  /* WordPress note: avoid literal ampersand-ampersand (logical AND) anywhere
+     in this script. WordPress's content filters rewrite bare ampersands to
+     HTML entities (e.g. amp-038-semicolon), and since browsers never decode
+     entities inside script tags, that breaks the JS parser on the front end
+     even though it looks fine in the editor. This helper replaces every
+     ampersand-ampersand below so nothing here ever needs that character. */
+  function allTrue() {
+    for (var i = 0; i < arguments.length; i++) {
+      if (!arguments[i]) return false;
+    }
+    return true;
+  }
 
   /* ---------------------------------------------------------------------
      AGENCY DATA STARTS HERE
@@ -750,10 +780,10 @@
   }, { passive: true });
 
   mapWrap.addEventListener("touchmove", function (e) {
-    if (e.touches.length === 1 && dragging) {
+    if (allTrue(e.touches.length === 1, dragging)) {
       e.preventDefault();
       pointerMove(e.touches[0].clientX, e.touches[0].clientY);
-    } else if (e.touches.length === 2 && pinchStartDist) {
+    } else if (allTrue(e.touches.length === 2, pinchStartDist)) {
       e.preventDefault();
       var dx = e.touches[0].clientX - e.touches[1].clientX;
       var dy = e.touches[0].clientY - e.touches[1].clientY;
@@ -837,7 +867,7 @@
 
   function updateCount() {
     var visible = AGENCIES.filter(function (a) { return activeFilters[a.category]; }).length;
-    if (activeFilters.california && activeFilters.outofstate && activeFilters.federal) {
+    if (allTrue(activeFilters.california, activeFilters.outofstate, activeFilters.federal)) {
       countEl.textContent = AGENCIES.length + " agencies shown \u2014 " + caCount + " California, " + oosCount + " out-of-state, " + fedCount + " federal";
     } else {
       countEl.textContent = visible + " of " + AGENCIES.length + " agencies shown";
@@ -854,8 +884,10 @@
       filterBtns[cat].classList.toggle("is-active", activeFilters[cat]);
       filterBtns[cat].setAttribute("aria-pressed", activeFilters[cat] ? "true" : "false");
     });
-    if (activeIndex !== null && !activeFilters[AGENCIES[activeIndex].category]) {
-      closePopup();
+    if (activeIndex !== null) {
+      if (!activeFilters[AGENCIES[activeIndex].category]) {
+        closePopup();
+      }
     }
     updateCount();
   }
@@ -984,7 +1016,7 @@
       rows[searchHighlight].scrollIntoView({ block: "nearest" });
     } else if (e.key === "Enter") {
       e.preventDefault();
-      if (searchHighlight >= 0 && searchMatches[searchHighlight]) {
+      if (allTrue(searchHighlight >= 0, searchMatches[searchHighlight])) {
         chooseResult(searchMatches[searchHighlight].i, AGENCIES[searchMatches[searchHighlight].i].name);
       } else if (searchMatches.length === 1) {
         chooseResult(searchMatches[0].i, AGENCIES[searchMatches[0].i].name);
