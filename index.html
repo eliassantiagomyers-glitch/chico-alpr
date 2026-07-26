@@ -43,7 +43,7 @@
       </div>
 
       <div class="calpr-filterbar" role="group" aria-label="Filter agencies by category">
-        <button type="button" class="calpr-textToggle is-activeCalifornia" id="calpr-filter-california" data-cat="california">California</button>
+        <button type="button" class="calpr-textToggleCalifornia is-active" id="calpr-filter-california" data-cat="california">California</button>
         <button type="button" class="calpr-textToggle is-active" id="calpr-filter-outofstate" data-cat="outofstate">Out-of-State</button>
         <button type="button" class="calpr-textToggle is-active" id="calpr-filter-federal" data-cat="federal">Federal</button>
       </div>
@@ -248,14 +248,28 @@
     cursor: pointer;
     border-bottom: 2px solid transparent;
   }
+  .calpr-textToggleCalifornia {
+    border: none;
+    background: none;
+    padding: 2px 1px;
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--calpr-ink-faint);
+    opacity: 0.65;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+  }
   .calpr-textToggle:hover { opacity: 0.9; }
   .calpr-textToggle.is-active {
     opacity: 1;
     color: var(--calpr-ink);
     border-bottom-color: var(--calpr-accent);
   }
-  .calpr-textToggle:hover { opacity: 0.9; }
-  .calpr-textToggle.is-activeCalifornia {
+  .calpr-textToggleCalifornia:hover { opacity: 0.9; }
+  .calpr-textToggleCalifornia.is-active {
     opacity: 1;
     color: var(--calpr-ink);
     border-bottom-color: var(--calpr-green);
